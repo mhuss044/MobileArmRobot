@@ -102,10 +102,64 @@ void updateMotorShaftPos(MOTOR a)
 	a.curShaftPos = analogRead(a.sensorPin);
 }
 
-int jointMotorControl(MOTOR a)
-{
-	
+/*
+*
 
+ Incremental advance limits; tend to oscillate below 550
+  optimal operating range; -700, past here and get some strange runaway to max pwm, but motor doesnt move..
+                             620(oscillations but reaches) - 650-680     motor reaches, then slips down? then runaway 
+                           operating range: 900? - 640
+
+*/
+
+int jointMotorControl(MOTOR a)        // Activating when error > 0? na, should be >10, since made it at 10.. but then wont maintain..
+{                                     // check to see if arduino common ground was connected during testing, if it affects perf of j0
+                                      // make sure only turning one direction, no motorFwd..
+	int pos_Error = a.curTarget - a.curShaftPos; 
+	if(abs(pos_Error) > 100)
+	  {
+	     if(sensorValue > target)     // Need to move upward toward target
+		PWM += 10;
+	      else
+		PWM -= 10;		// Seems that when overshoot, error under 100
+	  }
+	  else
+	  {
+	    if(abs(pos_Error) > 70)
+	    {
+	      if(sensorValue > target)     // Need to move upward toward target
+		PWM += 5;
+	      else
+		PWM -= 2;                  // Fall is lower than rise since not against gravity, dont fall too far away
+	    }
+	    else
+	    {
+	      if(abs(pos_Error) > 40)     // Needs correction
+	      {
+		if(sensorValue > target)
+		  PWM += 3;
+		else
+		  PWM -= 1;
+	      }
+	      else
+	      {
+		if(abs(pos_Error) > 10)     // Needs correction
+		{
+		  if(sensorValue > target)
+		    PWM += 1;
+		  else
+		    PWM -= 1;
+		}
+		else
+		  Serial.print("\nTarget Found!");
+	      }
+	    }
+	  }
+
+	if(PWM > maxPWM)			// Constrain
+		PWM = maxPWM;
+	else if(PWM < 0)
+		PWM = 0;	
 }
 
 int motorControl(MOTOR a)	// returns 1 if control engaged, 0 target reached
@@ -129,6 +183,47 @@ int motorControl(MOTOR a)	// returns 1 if control engaged, 0 target reached
 		motorStop(a);
 		return 0;
 	}
+}
+
+void gripperControl(int sensorValue, bool open)	// open = true;mv gripper to max pos
+{
+	int PWM = 0;
+//#define ARM_GRIPPER_MIN_PWM (255/5)*0.8
+//#define ARM_GRIPPER_MAX_PWM (255/5)*1.33
+
+int ARM_GRIPPER_MIN_PWM = 100;
+int ARM_GRIPPER_MAX_PWM = 110;
+
+	// moves to max pos;
+//	motorBwd(updatePID(sensorValue));
+	switch(open)
+	{
+	case true:	// move gripper to min pos
+		if(abs(sensorValue - ARM_GRIPPER_MIN_POS) > 20)
+			if(sensorValue > ARM_GRIPPER_MIN_POS)	// shaft is past the open position  		
+			{
+				PWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MIN_POS-sensorValue)/1023.0);
+
+				motorFwd(PWM); // moves toward open pos
+			}
+	break;
+	case false:
+		if(abs(sensorValue - ARM_GRIPPER_MAX_POS) > 20)
+			if(sensorValue < ARM_GRIPPER_MAX_POS)	// shaft is below the closed position  		
+			{
+				PWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MAX_POS-sensorValue)/1023.0);
+
+				motorBwd(PWM); // moves toward open pos
+			}
+	break;
+	}
+
+	if(PWM > 240)			// Constrain
+		PWM = 240;
+	else if(PWM < 0)
+		PWM = 0;
+
+
 }
 
 void setup() 
