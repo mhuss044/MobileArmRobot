@@ -16,6 +16,10 @@ If invert polarity on shaft pot, then result in diff vals
 
 #define MINPWM 100        // At 5.3 volts supplied to the Hbridge, min pwm to move motor
 #define MAXPWM 255
+
+#define ARM_JOINT0_ANGLE_FACTOR	1023/180	// Range in pot over range in deg 
+#define ARM_JOINT1_ANGLE_FACTOR	1023/180	// Range in pot over range in deg 
+
 #define ARM_JOINT0_HOME_POS 940		// Joint0 and Joint1 are such that arm not extended
 #define ARM_JOINT1_HOME_POS 693		// 
 #define ARM_GRIPPER_HOME_POS 435	// Gripper is in open position
@@ -29,30 +33,30 @@ If invert polarity on shaft pot, then result in diff vals
 #define ARM_J0_MAX_PWM (255/5)*3.5
 #define ARM_J1_MIN_PWM (255/5)*1
 #define ARM_J1_MAX_PWM (255/5)*7.1
-#define ARM_GRIPPER_MIN_PWM (255/5)*0.8
-#define ARM_GRIPPER_MAX_PWM (255/5)*1.33
+#define ARM_GRIPPER_MIN_PWM 100   //(255/5)*0.8
+#define ARM_GRIPPER_MAX_PWM 110   //(255/5)*1.33
 #define CONTROL_SYS_SS_ERROR 50		// The error after which need to engage control sys
 
 struct MOTOR
 {
   int motorIN1, motorIN2, motorEN, sensorPin;   // Pins 
   int curShaftPos, curTarget, maxShaftPos, minShaftPos;
-  int minPWM, maxPWM;        // saved shaft pos, maxPWM; no higher or unstable/danger
+  int minPWM, maxPWM, curPWM;        		// saved shaft pos, maxPWM; no higher or unstable/danger
 };						// minPWM needs to be where motor just begins to move
 
 //motorIN1, motorIN2, motorEN, sensorPin, shaftPos, curTarget, maxPWM;		
 // Platform motors:
-MOTOR motor_trans = { 33, 31, 2, A15, 0, 0, 0, 0, 50, 135};        // bwd/fwd
-MOTOR motor_rot = { 37, 35, 3, A14, 0, 0, 20, 80};            // rot
+MOTOR motor_trans = { 33, 31, 2, A15, 0, 0, 0, 0, 50, 135, 0};        // bwd/fwd
+MOTOR motor_rot = { 37, 35, 3, A14, 0, 0, 0, 0, 20, 80, 0};            // rot
 // Arm Motors
-MOTOR motor_armJoint0 = { 41, 39, 4, A11, 0, ARM_JOINT0_HOME_POS, ARM_JOINT0_MAX_POS, ARM_JOINT0_MIN_POS, ARM_J0_MIN_PWM, ARM_J0_MAX_PWM};
-MOTOR motor_armJoint1 = { 45, 43, 5, A12, 0, ARM_JOINT1_HOME_POS, ARM_JOINT0_MAX_POS, ARM_JOINT0_MIN_POS, ARM_J1_MIN_PWM, ARM_J1_MAX_PWM};
-MOTOR motor_gripper = { 49, 47, 6, A10, 0, ARM_GRIPPER_HOME_POS, ARM_GRIPPER_MAX_POS, ARM_GRIPPER_MIN_POS, ARM_GRIPPER_MIN_PWM, ARM_GRIPPER_MAX_PWM};         	   // gripper motor
+MOTOR motor_armJoint0 = { 41, 39, 4, A11, 0, ARM_JOINT0_HOME_POS, ARM_JOINT0_MAX_POS, ARM_JOINT0_MIN_POS, ARM_J0_MIN_PWM, ARM_J0_MAX_PWM, 0};
+MOTOR motor_armJoint1 = { 45, 43, 5, A12, 0, ARM_JOINT1_HOME_POS, ARM_JOINT0_MAX_POS, ARM_JOINT0_MIN_POS, ARM_J1_MIN_PWM, ARM_J1_MAX_PWM, 0};
+MOTOR motor_gripper = { 49, 47, 6, A10, 0, ARM_GRIPPER_HOME_POS, ARM_GRIPPER_MAX_POS, ARM_GRIPPER_MIN_POS, ARM_GRIPPER_MIN_PWM, ARM_GRIPPER_MAX_PWM, 0};         	   // gripper motor
 
-int operatingMode = 0;		// Determines what instructions to execute
+int operatingMode = 3;		// Determines what instructions to execute
 int sensorValue = 0;        // value read from the pot
 int outputValue = 0;        // value output to the PWM (analog out)
-int joint0Pos = 675, joint1Pos = 407;
+int joint0Pos = 700, joint1Pos = 400;
 unsigned long int curtime = 0;
 unsigned long int lastTime= 0;
 
@@ -97,9 +101,9 @@ void runMotorFor(int mSec, MOTOR a, bool CCW)
 	motorStop(a);
 }
 
-void updateMotorShaftPos(MOTOR a)
+void updateMotorShaftPos(MOTOR *a)
 {
-	a.curShaftPos = analogRead(a.sensorPin);
+	a->curShaftPos = analogRead(a->sensorPin);
 }
 
 /*
@@ -115,51 +119,70 @@ void updateMotorShaftPos(MOTOR a)
 int jointMotorControl(MOTOR a)        // Activating when error > 0? na, should be >10, since made it at 10.. but then wont maintain..
 {                                     // check to see if arduino common ground was connected during testing, if it affects perf of j0
                                       // make sure only turning one direction, no motorFwd..
-	int pos_Error = a.curTarget - a.curShaftPos; 
+	
+}
+
+int moveJointToPos(MOTOR *joint, int pos)		// pos is 0-1023
+{
+	bool targetFound = false;
+	joint->curTarget = pos;
+	int pos_Error = joint->curTarget - joint->curShaftPos; 
 	if(abs(pos_Error) > 100)
 	  {
-	     if(sensorValue > target)     // Need to move upward toward target
-		PWM += 10;
+	     if(joint->curShaftPos > joint->curTarget)     // Need to move upward toward target
+		joint->curPWM += 10;
 	      else
-		PWM -= 10;		// Seems that when overshoot, error under 100
+		joint->curPWM -= 2;		// Seems that when overshoot, error under 100
 	  }
 	  else
 	  {
 	    if(abs(pos_Error) > 70)
 	    {
-	      if(sensorValue > target)     // Need to move upward toward target
-		PWM += 5;
+	      if(joint->curShaftPos > joint->curTarget)     // Need to move upward toward target
+		joint->curPWM += 3;
 	      else
-		PWM -= 2;                  // Fall is lower than rise since not against gravity, dont fall too far away
+		joint->curPWM -= 1;                  // Fall is lower than rise since not against gravity, dont fall too far away
 	    }
 	    else
 	    {
 	      if(abs(pos_Error) > 40)     // Needs correction
 	      {
-		if(sensorValue > target)
-		  PWM += 3;
+		if(joint->curShaftPos > joint->curTarget)
+		  joint->curPWM += 2;
 		else
-		  PWM -= 1;
+		  joint->curPWM -= 1;
 	      }
 	      else
 	      {
 		if(abs(pos_Error) > 10)     // Needs correction
 		{
-		  if(sensorValue > target)
-		    PWM += 1;
-		  else
-		    PWM -= 1;
+			if(joint->curShaftPos > joint->curTarget)
+				joint->curPWM += 1;
+			else
+				joint->curPWM -= 1;
 		}
 		else
-		  Serial.print("\nTarget Found!");
+			targetFound = true;	
 	      }
 	    }
 	  }
 
-	if(PWM > maxPWM)			// Constrain
-		PWM = maxPWM;
-	else if(PWM < 0)
-		PWM = 0;	
+// Need to check if works; needs adjustment
+/*
+	if(joint->PWM > joint->maxPWM)			// Constrain
+		joint->PWM = joint->maxPWM;
+	else if(joint->PWM < 0)
+		joint->PWM = 0;
+*/
+
+  if(joint->curPWM > 255)      // Constrain
+    joint->curPWM = 255;
+  else if(joint->curPWM < 0)
+    joint->curPWM = 0;
+
+
+	motorBwd(*joint, joint->curPWM);	
+	return targetFound ? 1 : 0;			// if targetFound = true, return 1
 }
 
 int motorControl(MOTOR a)	// returns 1 if control engaged, 0 target reached
@@ -185,45 +208,42 @@ int motorControl(MOTOR a)	// returns 1 if control engaged, 0 target reached
 	}
 }
 
-void gripperControl(int sensorValue, bool open)	// open = true;mv gripper to max pos
-{
+void gripperControl(MOTOR *a, int sensorValue, bool open)	// open = true;mv gripper to max pos
+{						// Check error tolerance; when was at 20, saw motor tried to push past open..
+						// add feature to close at certain dist from closed
 	int PWM = 0;
 //#define ARM_GRIPPER_MIN_PWM (255/5)*0.8
 //#define ARM_GRIPPER_MAX_PWM (255/5)*1.33
 
-int ARM_GRIPPER_MIN_PWM = 100;
-int ARM_GRIPPER_MAX_PWM = 110;
 
 	// moves to max pos;
 //	motorBwd(updatePID(sensorValue));
 	switch(open)
 	{
 	case true:	// move gripper to min pos
-		if(abs(sensorValue - ARM_GRIPPER_MIN_POS) > 20)
+		if(abs(sensorValue - ARM_GRIPPER_MIN_POS) > 120)
 			if(sensorValue > ARM_GRIPPER_MIN_POS)	// shaft is past the open position  		
 			{
-				PWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MIN_POS-sensorValue)/1023.0);
+				a->curPWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MIN_POS-sensorValue)/1023.0);
 
-				motorFwd(PWM); // moves toward open pos
+				motorFwd(*a, a->curPWM); // moves toward open pos
 			}
 	break;
 	case false:
-		if(abs(sensorValue - ARM_GRIPPER_MAX_POS) > 20)
+		if(abs(sensorValue - ARM_GRIPPER_MAX_POS) > 120)
 			if(sensorValue < ARM_GRIPPER_MAX_POS)	// shaft is below the closed position  		
 			{
 				PWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MAX_POS-sensorValue)/1023.0);
 
-				motorBwd(PWM); // moves toward open pos
+				motorBwd(*a, a->curPWM); // moves toward open pos
 			}
 	break;
 	}
 
-	if(PWM > 240)			// Constrain
-		PWM = 240;
+	if(a->curPWM > 240)			// Constrain
+		a->curPWM = 240;
 	else if(PWM < 0)
-		PWM = 0;
-
-
+		a->curPWM = 0;
 }
 
 void setup() 
@@ -282,19 +302,56 @@ void loop()
 		break;
 		case 3:		// Received angle commands
 		// Move arm to required angles
+		joint0Pos = 700;
+		joint1Pos = 600;
+   
 			motor_armJoint0.curTarget = joint0Pos;
 			motor_armJoint1.curTarget = joint1Pos;
 			
 			//updateMotorShaftPos(motor_trans);
 			//updateMotorShaftPos(motor_rot);
-			updateMotorShaftPos(motor_armJoint0);
-			updateMotorShaftPos(motor_armJoint1);
+			updateMotorShaftPos(&motor_armJoint0);
+			updateMotorShaftPos(&motor_armJoint1);
 			//updateMotorShaftPos(motor_gripper);
 
+      Serial.print("\tPWM vals (J0, J1): ");
+      Serial.print(motor_armJoint0.curPWM); 
+      Serial.print(",");
+      Serial.println(motor_armJoint1.curPWM);
+      
+     // delay(100);
+
+        if(moveJointToPos(&motor_armJoint1, joint1Pos))
+        {
+          Serial.print("\t<---Joint 1 Target Found. Error: ");
+          Serial.println(abs(motor_armJoint1.curTarget-motor_armJoint1.curShaftPos)); 
+
+                     if(moveJointToPos(&motor_armJoint0, joint0Pos))
+          {
+            Serial.print("\t<---Joint 0 Target Found. Error: ");
+            Serial.println(abs(motor_armJoint0.curTarget-motor_armJoint0.curShaftPos)); 
+    
+          }
+          else
+          {
+            Serial.print("\tJoint 0 Acquiring Target. Error: ");
+            Serial.println(abs(motor_armJoint0.curTarget-motor_armJoint0.curShaftPos));
+            //Serial.println(sensorValue);
+          }
+
+        }
+        else
+        {
+          Serial.print("\tJoint 1 Acquiring Target. Error: ");
+          Serial.println(abs(motor_armJoint1.curTarget-motor_armJoint1.curShaftPos));
+          //Serial.println(sensorValue);
+        }  
+        
+      
 			//motorControl(motor_trans);
 			//motorControl(motor_rot);
-			motorControl(motor_armJoint0);
-			motorControl(motor_armJoint1);
+			//motorControl(motor_armJoint0);
+			//motorControl(motor_armJoint1);
 			//motorControl(motor_gripper);
 			
 			delay(20);	// Not neccessary to control evry iteration	
