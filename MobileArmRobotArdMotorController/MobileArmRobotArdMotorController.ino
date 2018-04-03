@@ -12,6 +12,8 @@ J1 min, max; 42, 986, ccw up = dec pos
 Gripper min, max: 427, 770, open ,closed
 
 If invert polarity on shaft pot, then result in diff vals
+
+translate; 50500 for 1 meter.
 */
 
 #define MINPWM 100        // At 5.3 volts supplied to the Hbridge, min pwm to move motor
@@ -27,14 +29,14 @@ If invert polarity on shaft pot, then result in diff vals
 #define ARM_JOINT0_MAX_POS 960
 #define ARM_JOINT1_MIN_POS 42
 #define ARM_JOINT1_MAX_POS 986
-#define ARM_GRIPPER_MIN_POS 427	// Gripper is in open position
-#define ARM_GRIPPER_MAX_POS 770	// Gripper is in closed position
+#define ARM_GRIPPER_MIN_POS 527	// Gripper is in open position
+#define ARM_GRIPPER_MAX_POS 870	// Gripper is in closed position
 #define ARM_J0_MIN_PWM (255/5)*1
 #define ARM_J0_MAX_PWM (255/5)*3.5
 #define ARM_J1_MIN_PWM (255/5)*1
 #define ARM_J1_MAX_PWM (255/5)*7.1
-#define ARM_GRIPPER_MIN_PWM 100   //(255/5)*0.8
-#define ARM_GRIPPER_MAX_PWM 110   //(255/5)*1.33
+#define ARM_GRIPPER_MIN_PWM 70   //(255/5)*0.8
+#define ARM_GRIPPER_MAX_PWM 80   //(255/5)*1.33
 #define CONTROL_SYS_SS_ERROR 50		// The error after which need to engage control sys
 
 struct MOTOR
@@ -46,12 +48,12 @@ struct MOTOR
 
 //motorIN1, motorIN2, motorEN, sensorPin, shaftPos, curTarget, maxPWM;		
 // Platform motors:
-MOTOR motor_trans = { 33, 31, 2, A15, 0, 0, 0, 0, 50, 135, 0};        // bwd/fwd
-MOTOR motor_rot = { 37, 35, 3, A14, 0, 0, 0, 0, 20, 80, 0};            // rot
+MOTOR motor_trans = { 33, 31, 8, 2, 0, 0, 0, 0, 150, 180, 0};        // bwd/fwd
+MOTOR motor_rot = { 37, 35, 9, 3, 0, 0, 0, 0, 100, 140, 0};            // rot
 // Arm Motors
 MOTOR motor_armJoint0 = { 41, 39, 4, A11, 0, ARM_JOINT0_HOME_POS, ARM_JOINT0_MAX_POS, ARM_JOINT0_MIN_POS, ARM_J0_MIN_PWM, ARM_J0_MAX_PWM, 0};
-MOTOR motor_armJoint1 = { 45, 43, 5, A12, 0, ARM_JOINT1_HOME_POS, ARM_JOINT0_MAX_POS, ARM_JOINT0_MIN_POS, ARM_J1_MIN_PWM, ARM_J1_MAX_PWM, 0};
-MOTOR motor_gripper = { 49, 47, 6, A10, 0, ARM_GRIPPER_HOME_POS, ARM_GRIPPER_MAX_POS, ARM_GRIPPER_MIN_POS, ARM_GRIPPER_MIN_PWM, ARM_GRIPPER_MAX_PWM, 0};         	   // gripper motor
+MOTOR motor_armJoint1 = { 49, 47, 6, A12, 0, ARM_JOINT1_HOME_POS, ARM_JOINT0_MAX_POS, ARM_JOINT0_MIN_POS, ARM_J1_MIN_PWM, ARM_J1_MAX_PWM, 0};
+MOTOR motor_gripper = { 45, 43, 5, A10, 0, ARM_GRIPPER_HOME_POS, ARM_GRIPPER_MAX_POS, ARM_GRIPPER_MIN_POS, ARM_GRIPPER_MIN_PWM, ARM_GRIPPER_MAX_PWM, 0};         	   // gripper motor
 
 int operatingMode = 3;		// Determines what instructions to execute
 int sensorValue = 0;        // value read from the pot
@@ -130,39 +132,39 @@ int moveJointToPos(MOTOR *joint, int pos)		// pos is 0-1023
 	if(abs(pos_Error) > 100)
 	  {
 	     if(joint->curShaftPos > joint->curTarget)     // Need to move upward toward target
-		joint->curPWM += 10;
-	      else
-		joint->curPWM -= 2;		// Seems that when overshoot, error under 100
+		    joint->curPWM += 10;
+	     else
+		    joint->curPWM -= 2;		// Seems that when overshoot, error under 100
 	  }
 	  else
 	  {
 	    if(abs(pos_Error) > 70)
 	    {
 	      if(joint->curShaftPos > joint->curTarget)     // Need to move upward toward target
-		joint->curPWM += 3;
+		      joint->curPWM += 3;
 	      else
-		joint->curPWM -= 1;                  // Fall is lower than rise since not against gravity, dont fall too far away
+		      joint->curPWM -= 1;                  // Fall is lower than rise since not against gravity, dont fall too far away
 	    }
 	    else
 	    {
 	      if(abs(pos_Error) > 40)     // Needs correction
 	      {
-		if(joint->curShaftPos > joint->curTarget)
-		  joint->curPWM += 2;
-		else
-		  joint->curPWM -= 1;
-	      }
+      		if(joint->curShaftPos > joint->curTarget)
+      		  joint->curPWM += 2;
+      		else
+      		  joint->curPWM -= 1;
+      	 }
 	      else
 	      {
-		if(abs(pos_Error) > 10)     // Needs correction
-		{
-			if(joint->curShaftPos > joint->curTarget)
-				joint->curPWM += 1;
-			else
-				joint->curPWM -= 1;
-		}
-		else
-			targetFound = true;	
+      		if(abs(pos_Error) > 10)     // Needs correction
+      		{
+      			if(joint->curShaftPos > joint->curTarget)
+      				joint->curPWM += 1;
+      			else
+      				joint->curPWM -= 1;
+      		}
+		      else
+			      targetFound = true;	
 	      }
 	    }
 	  }
@@ -208,35 +210,47 @@ int motorControl(MOTOR a)	// returns 1 if control engaged, 0 target reached
 	}
 }
 
-void gripperControl(MOTOR *a, int sensorValue, bool open)	// open = true;mv gripper to max pos
+void gripperControl(MOTOR *a, bool open)	// open = true;mv gripper to max pos
 {						// Check error tolerance; when was at 20, saw motor tried to push past open..
 						// add feature to close at certain dist from closed
 	int PWM = 0;
 //#define ARM_GRIPPER_MIN_PWM (255/5)*0.8
 //#define ARM_GRIPPER_MAX_PWM (255/5)*1.33
 
+  int sensorValue = analogRead(a->sensorPin);
 
 	// moves to max pos;
-//	motorBwd(updatePID(sensorValue));
 	switch(open)
 	{
 	case true:	// move gripper to min pos
-		if(abs(sensorValue - ARM_GRIPPER_MIN_POS) > 120)
+		if(abs(sensorValue - ARM_GRIPPER_MIN_POS) > 100)
+    {
 			if(sensorValue > ARM_GRIPPER_MIN_POS)	// shaft is past the open position  		
 			{
 				a->curPWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MIN_POS-sensorValue)/1023.0);
 
-				motorFwd(*a, a->curPWM); // moves toward open pos
-			}
-	break;
-	case false:
-		if(abs(sensorValue - ARM_GRIPPER_MAX_POS) > 120)
-			if(sensorValue < ARM_GRIPPER_MAX_POS)	// shaft is below the closed position  		
-			{
-				PWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MAX_POS-sensorValue)/1023.0);
-
 				motorBwd(*a, a->curPWM); // moves toward open pos
 			}
+    }
+    else
+    {
+      motorBwd(*a, 0); // moves toward open pos
+    }
+	break;
+	case false:
+		if(abs(sensorValue - ARM_GRIPPER_MAX_POS) > 100)
+    {
+			if(sensorValue < ARM_GRIPPER_MAX_POS)	// shaft is below the closed position  		
+			{
+				a->curPWM = ARM_GRIPPER_MIN_PWM + (ARM_GRIPPER_MAX_PWM - ARM_GRIPPER_MIN_PWM)*(abs(ARM_GRIPPER_MAX_POS-sensorValue)/1023.0);
+
+				motorFwd(*a, a->curPWM); // moves toward open pos
+			}
+    }
+    else
+    {
+      motorFwd(*a, 0);
+    }
 	break;
 	}
 
@@ -280,8 +294,14 @@ void setup()
 
 }
 
+bool gripperAction = false;
+
 void loop() 
 {
+	/*
+	if(Serial.available())
+	{  Serial.read()
+	*/
 	switch(operatingMode)
 	{
 		case 0:		// The robot is awaiting instructions
@@ -303,7 +323,7 @@ void loop()
 		case 3:		// Received angle commands
 		// Move arm to required angles
 		joint0Pos = 700;
-		joint1Pos = 600;
+		joint1Pos = 450;    // 380 -
    
 			motor_armJoint0.curTarget = joint0Pos;
 			motor_armJoint1.curTarget = joint1Pos;
@@ -326,26 +346,30 @@ void loop()
           Serial.print("\t<---Joint 1 Target Found. Error: ");
           Serial.println(abs(motor_armJoint1.curTarget-motor_armJoint1.curShaftPos)); 
 
-                     if(moveJointToPos(&motor_armJoint0, joint0Pos))
+          if(moveJointToPos(&motor_armJoint0, joint0Pos))
           {
             Serial.print("\t<---Joint 0 Target Found. Error: ");
             Serial.println(abs(motor_armJoint0.curTarget-motor_armJoint0.curShaftPos)); 
-    
+            gripperAction = true;
           }
           else
           {
             Serial.print("\tJoint 0 Acquiring Target. Error: ");
             Serial.println(abs(motor_armJoint0.curTarget-motor_armJoint0.curShaftPos));
             //Serial.println(sensorValue);
+            gripperAction = false;
           }
-
         }
         else
         {
           Serial.print("\tJoint 1 Acquiring Target. Error: ");
           Serial.println(abs(motor_armJoint1.curTarget-motor_armJoint1.curShaftPos));
           //Serial.println(sensorValue);
+          gripperAction = false;
         }  
+
+        if((abs(motor_armJoint1.curTarget-motor_armJoint1.curShaftPos) + abs(motor_armJoint0.curTarget-motor_armJoint0.curShaftPos)) < 20)
+          gripperControl(&motor_gripper, false);
         
       
 			//motorControl(motor_trans);

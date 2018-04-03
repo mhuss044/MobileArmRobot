@@ -37,5 +37,6 @@ while True:
     s.close()
 
     ser = serial.Serial('/dev/ttyACM0', 9600)
+    # ser.write('3')
     while true:
             print(ser.readline())
