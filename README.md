@@ -3,7 +3,10 @@ A robot with a two joint arm that retrieves pre-marked objects.
 
 Below is the prototype that was evaluated at the end of our final project course. 
 
-Firstly one of two switches is selected. The switches are connected to a RaspberryPi which acts as a server that the Pi on the robot connects to over wifi (python socket programming). The two switches correspond to two different programmed distances. The server Pi sends the command to move the certain distance to the target. The robot pi receives the command and in turn issues a move command to the Arduino controlling the platform. The Arduino implements a control system to determine the distance travelled. Once the required distance has been reached, the Arduino uses a proportional control system to mvoe the two joints on the arm to a preprogrammed position. Once the motor potentiometers reach the right position, the gripper motor is activated. The Arduino then disengages the arm and moves the robot back the required distance to the point of origin.  
+Firstly one of two switches is selected. The switches are connected to a RaspberryPi which acts as a server that the Pi on the robot connects to over wifi (python socket programming). The two switches correspond to two different programmed distances. The server Pi sends the command to move the certain distance to the target. 
+The robot pi receives the command and in turn issues a move command to the Arduino controlling the platform. The Arduino implements a control system to determine the distance travelled. 
+Once the required distance has been reached, the Arduino uses a proportional control system to mvoe the two joints on the arm to a preprogrammed position. 
+Once the motor potentiometers reach the right position, the gripper motor is activated. The Arduino then disengages the arm and moves the robot back the required distance to the point of origin.  
 
 [![Presentation](https://img.youtube.com/vi/R4r8J2B06_M/0.jpg)](https://www.youtube.com/watch?v=R4r8J2B06_M)
 https://www.youtube.com/watch?v=R4r8J2B06_M
