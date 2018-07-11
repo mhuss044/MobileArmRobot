@@ -16,7 +16,7 @@ https://www.youtube.com/watch?v=R4r8J2B06_M
 [![Presentation](https://img.youtube.com/vi/BbUbI-8GJ5g/0.jpg)](https://www.youtube.com/watch?v=BbUbI-8GJ5g)
 https://www.youtube.com/watch?v=BbUbI-8GJ5g
 
-The original ideal operation:
+The original plan of operation:
 
 Controller consists of switches corresponding to which room, and which object. There are two rooms, with two objects in each room. The objects are a red, and green cup. The Raspberry pi on the controller translates the switches into a message which is then sent over wifi (python socket programming).
 
