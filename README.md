@@ -16,10 +16,6 @@ https://www.youtube.com/watch?v=_rx5fLndBoY
 [![Presentation](https://img.youtube.com/vi/LLRKCYidRPY/0.jpg)](https://www.youtube.com/watch?v=LLRKCYidRPY)
 https://www.youtube.com/watch?v=LLRKCYidRPY
 
-[![Presentation](https://img.youtube.com/vi/R4r8J2B06_M/0.jpg)](https://www.youtube.com/watch?v=R4r8J2B06_M)
-https://www.youtube.com/watch?v=R4r8J2B06_M
-[![Presentation](https://img.youtube.com/vi/BbUbI-8GJ5g/0.jpg)](https://www.youtube.com/watch?v=BbUbI-8GJ5g)
-https://www.youtube.com/watch?v=BbUbI-8GJ5g
 
 The original plan of operation:
 
