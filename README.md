@@ -11,6 +11,11 @@ Once the required distance has been reached, the Arduino uses a proportional con
 
 Once the motor potentiometers reach the right position, the gripper motor is activated. The Arduino then disengages the arm and moves the robot back the required distance to the point of origin.  
 
+[![Presentation](https://img.youtube.com/vi/_rx5fLndBoY/0.jpg)](https://www.youtube.com/watch?v=_rx5fLndBoY)
+https://www.youtube.com/watch?v=_rx5fLndBoY
+[![Presentation](https://img.youtube.com/vi/LLRKCYidRPY/0.jpg)](https://www.youtube.com/watch?v=LLRKCYidRPY)
+https://www.youtube.com/watch?v=LLRKCYidRPY
+
 [![Presentation](https://img.youtube.com/vi/R4r8J2B06_M/0.jpg)](https://www.youtube.com/watch?v=R4r8J2B06_M)
 https://www.youtube.com/watch?v=R4r8J2B06_M
 [![Presentation](https://img.youtube.com/vi/BbUbI-8GJ5g/0.jpg)](https://www.youtube.com/watch?v=BbUbI-8GJ5g)
