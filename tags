@@ -1,0 +1,151 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Kitchen	ex/test_kobj1.py	/^        Kitchen = GPIO.input(18)$/;"	v
+Kobj1	ex/test_kobj1.py	/^                Kobj1 = GPIO.input(23)$/;"	v
+Kobj2	ex/test_kobj1.py	/^                Kobj2 = GPIO.input(24)$/;"	v
+M	ex/ball_tracking.py	/^		M = cv2.moments(c)$/;"	v
+M	ex/ball_tracking_2.py	/^		M = cv2.moments(c)$/;"	v
+M	ex/ball_tracking_blue.py	/^		M = cv2.moments(c)$/;"	v
+M	ex/ball_tracking_green.py	/^		M = cv2.moments(c)$/;"	v
+M	ex/ball_tracking_yellow.py	/^		M = cv2.moments(c)$/;"	v
+ans	client.py	/^		ans = '1'$/;"	v
+ans	client.py	/^		ans = '2'$/;"	v
+ans	ex/test_kobj1.py	/^		ans = "hello"$/;"	v
+ans	ex/test_kobj1.py	/^		ans = str(ans)$/;"	v
+ans	ex/test_kobj1.py	/^                        ans = '0'$/;"	v
+ans	testing.py	/^ans = "hello"$/;"	v
+ans	testing.py	/^ans = str(ans)$/;"	v
+ap	ex/ball_tracking.py	/^ap = argparse.ArgumentParser()$/;"	v
+ap	ex/ball_tracking_2.py	/^ap = argparse.ArgumentParser()$/;"	v
+ap	ex/ball_tracking_blue.py	/^ap = argparse.ArgumentParser()$/;"	v
+ap	ex/ball_tracking_green.py	/^ap = argparse.ArgumentParser()$/;"	v
+ap	ex/ball_tracking_yellow.py	/^ap = argparse.ArgumentParser()$/;"	v
+args	ex/ball_tracking.py	/^args = vars(ap.parse_args())$/;"	v
+args	ex/ball_tracking_2.py	/^args = vars(ap.parse_args())$/;"	v
+args	ex/ball_tracking_blue.py	/^args = vars(ap.parse_args())$/;"	v
+args	ex/ball_tracking_green.py	/^args = vars(ap.parse_args())$/;"	v
+args	ex/ball_tracking_yellow.py	/^args = vars(ap.parse_args())$/;"	v
+blueLower	ex/ball_tracking_2.py	/^blueLower = (98, 109, 20)$/;"	v
+blueLower	ex/ball_tracking_blue.py	/^blueLower = (98, 109, 20)$/;"	v
+blueUpper	ex/ball_tracking_2.py	/^blueUpper = (112, 255, 255)$/;"	v
+blueUpper	ex/ball_tracking_blue.py	/^blueUpper = (112, 255, 255)$/;"	v
+c	ex/ball_tracking.py	/^		c = max(cnts, key=cv2.contourArea)$/;"	v
+c	ex/ball_tracking_2.py	/^		c = max(cnts, key=cv2.contourArea)$/;"	v
+c	ex/ball_tracking_blue.py	/^		c = max(cnts, key=cv2.contourArea)$/;"	v
+c	ex/ball_tracking_green.py	/^		c = max(cnts, key=cv2.contourArea)$/;"	v
+c	ex/ball_tracking_yellow.py	/^		c = max(cnts, key=cv2.contourArea)$/;"	v
+camera	ex/ball_tracking.py	/^	camera = cv2.VideoCapture(0)$/;"	v
+camera	ex/ball_tracking.py	/^	camera = cv2.VideoCapture(args["video"])$/;"	v
+camera	ex/ball_tracking_2.py	/^	camera = cv2.VideoCapture(0)$/;"	v
+camera	ex/ball_tracking_2.py	/^	camera = cv2.VideoCapture(args["video"])$/;"	v
+camera	ex/ball_tracking_blue.py	/^	camera = cv2.VideoCapture(0)$/;"	v
+camera	ex/ball_tracking_blue.py	/^	camera = cv2.VideoCapture(args["video"])$/;"	v
+camera	ex/ball_tracking_green.py	/^	camera = cv2.VideoCapture(0)$/;"	v
+camera	ex/ball_tracking_green.py	/^	camera = cv2.VideoCapture(args["video"])$/;"	v
+camera	ex/ball_tracking_yellow.py	/^	camera = cv2.VideoCapture(0)$/;"	v
+camera	ex/ball_tracking_yellow.py	/^	camera = cv2.VideoCapture(args["video"])$/;"	v
+camera	ex/test_video.py	/^camera = PiCamera()$/;"	v
+center	ex/ball_tracking.py	/^		center = (int(M["m10"] \/ M["m00"]), int(M["m01"] \/ M["m00"]))$/;"	v
+center	ex/ball_tracking.py	/^	center = None$/;"	v
+center	ex/ball_tracking_2.py	/^		center = (int(M["m10"] \/ M["m00"]), int(M["m01"] \/ M["m00"]))$/;"	v
+center	ex/ball_tracking_2.py	/^	center = None$/;"	v
+center	ex/ball_tracking_blue.py	/^		center = (int(M["m10"] \/ M["m00"]), int(M["m01"] \/ M["m00"]))$/;"	v
+center	ex/ball_tracking_blue.py	/^	center = None$/;"	v
+center	ex/ball_tracking_green.py	/^		center = (int(M["m10"] \/ M["m00"]), int(M["m01"] \/ M["m00"]))$/;"	v
+center	ex/ball_tracking_green.py	/^	center = None$/;"	v
+center	ex/ball_tracking_yellow.py	/^		center = (int(M["m10"] \/ M["m00"]), int(M["m01"] \/ M["m00"]))$/;"	v
+center	ex/ball_tracking_yellow.py	/^	center = None$/;"	v
+cnts	ex/ball_tracking.py	/^	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,$/;"	v
+cnts	ex/ball_tracking_2.py	/^	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,$/;"	v
+cnts	ex/ball_tracking_blue.py	/^	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,$/;"	v
+cnts	ex/ball_tracking_green.py	/^	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,$/;"	v
+cnts	ex/ball_tracking_yellow.py	/^	cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,$/;"	v
+data	robot.py	/^	data = s.recv(1024)$/;"	v
+distance	ex/ball_tracking_blue.py	/^		distance = (math.log(radius\/124)\/math.log(1.85678))*(-1)$/;"	v
+distance	ex/ball_tracking_green.py	/^		distance = (math.log(radius\/124)\/math.log(1.85678))*(-1)$/;"	v
+distance	ex/ball_tracking_yellow.py	/^		distance = (math.log(radius\/124)\/math.log(1.85678))*(-1)$/;"	v
+flag	ex/test_kobj1.py	/^                        flag = True$/;"	v
+flag	ex/test_kobj1.py	/^        flag = False$/;"	v
+frame	ex/ball_tracking.py	/^	frame = imutils.resize(frame, width=600)$/;"	v
+frame	ex/ball_tracking_2.py	/^	frame = imutils.resize(frame, width=600)$/;"	v
+frame	ex/ball_tracking_blue.py	/^	frame = imutils.resize(frame, width=600)$/;"	v
+frame	ex/ball_tracking_green.py	/^	frame = imutils.resize(frame, width=600)$/;"	v
+frame	ex/ball_tracking_yellow.py	/^	frame = imutils.resize(frame, width=600)$/;"	v
+greenLower	ex/ball_tracking.py	/^greenLower = (29, 86, 6)$/;"	v
+greenLower	ex/ball_tracking_green.py	/^greenLower = (29, 86, 6)$/;"	v
+greenUpper	ex/ball_tracking.py	/^greenUpper = (85, 255, 255)$/;"	v
+greenUpper	ex/ball_tracking_green.py	/^greenUpper = (85, 255, 255)$/;"	v
+help	ex/ball_tracking.py	/^	help="max buffer size")$/;"	v
+help	ex/ball_tracking.py	/^	help="path to the (optional) video file")$/;"	v
+help	ex/ball_tracking_2.py	/^	help="max buffer size")$/;"	v
+help	ex/ball_tracking_2.py	/^	help="path to the (optional) video file")$/;"	v
+help	ex/ball_tracking_blue.py	/^	help="max buffer size")$/;"	v
+help	ex/ball_tracking_blue.py	/^	help="path to the (optional) video file")$/;"	v
+help	ex/ball_tracking_green.py	/^	help="max buffer size")$/;"	v
+help	ex/ball_tracking_green.py	/^	help="path to the (optional) video file")$/;"	v
+help	ex/ball_tracking_yellow.py	/^	help="max buffer size")$/;"	v
+help	ex/ball_tracking_yellow.py	/^	help="path to the (optional) video file")$/;"	v
+host	client.py	/^		host = '192.168.0.100'$/;"	v
+host	ex/test_kobj1.py	/^		host = '192.168.43.52'$/;"	v
+host	robot.py	/^host = '192.168.0.100'$/;"	v
+host	server.py	/^host = '192.168.0.100'$/;"	v
+host	testing.py	/^host = '192.168.43.52'$/;"	v
+hsv	ex/ball_tracking.py	/^	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)$/;"	v
+hsv	ex/ball_tracking_2.py	/^	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)$/;"	v
+hsv	ex/ball_tracking_blue.py	/^	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)$/;"	v
+hsv	ex/ball_tracking_green.py	/^	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)$/;"	v
+hsv	ex/ball_tracking_yellow.py	/^	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)$/;"	v
+image	ex/test_video.py	/^	image = frame.array$/;"	v
+key	ex/ball_tracking.py	/^	key = cv2.waitKey(1) & 0xFF$/;"	v
+key	ex/ball_tracking_2.py	/^	key = cv2.waitKey(1) & 0xFF$/;"	v
+key	ex/ball_tracking_blue.py	/^	key = cv2.waitKey(1) & 0xFF$/;"	v
+key	ex/ball_tracking_green.py	/^	key = cv2.waitKey(1) & 0xFF$/;"	v
+key	ex/ball_tracking_yellow.py	/^	key = cv2.waitKey(1) & 0xFF$/;"	v
+key	ex/test_video.py	/^	key = cv2.waitKey(1) & 0xFF$/;"	v
+mask	ex/ball_tracking.py	/^	mask = cv2.dilate(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking.py	/^	mask = cv2.erode(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking.py	/^	mask = cv2.inRange(hsv, greenLower, greenUpper)$/;"	v
+mask	ex/ball_tracking_2.py	/^	mask = cv2.dilate(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_2.py	/^	mask = cv2.erode(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_2.py	/^	mask = cv2.inRange(hsv, blueLower, blueUpper)$/;"	v
+mask	ex/ball_tracking_blue.py	/^	mask = cv2.dilate(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_blue.py	/^	mask = cv2.erode(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_blue.py	/^	mask = cv2.inRange(hsv, blueLower, blueUpper)$/;"	v
+mask	ex/ball_tracking_green.py	/^	mask = cv2.dilate(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_green.py	/^	mask = cv2.erode(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_green.py	/^	mask = cv2.inRange(hsv, greenLower, greenUpper)$/;"	v
+mask	ex/ball_tracking_yellow.py	/^	mask = cv2.dilate(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_yellow.py	/^	mask = cv2.erode(mask, None, iterations=2)$/;"	v
+mask	ex/ball_tracking_yellow.py	/^	mask = cv2.inRange(hsv, yellowLower, yellowUpper)$/;"	v
+port	client.py	/^		port = 9000$/;"	v
+port	ex/test_kobj1.py	/^		port = 12345$/;"	v
+port	robot.py	/^port = 9000$/;"	v
+port	server.py	/^port = 12345$/;"	v
+port	testing.py	/^port = 12345$/;"	v
+pts	ex/ball_tracking.py	/^pts = deque(maxlen=args["buffer"])$/;"	v
+pts	ex/ball_tracking_2.py	/^pts = deque(maxlen=args["buffer"])$/;"	v
+pts	ex/ball_tracking_blue.py	/^pts = deque(maxlen=args["buffer"])$/;"	v
+pts	ex/ball_tracking_green.py	/^pts = deque(maxlen=args["buffer"])$/;"	v
+pts	ex/ball_tracking_yellow.py	/^pts = deque(maxlen=args["buffer"])$/;"	v
+question	ex/test_kobj1.py	/^		question = s.recv(1024)$/;"	v
+question	testing.py	/^question = s.recv(1024)$/;"	v
+rawCapture	ex/test_video.py	/^rawCapture = PiRGBArray(camera, size=(640, 480))$/;"	v
+s	client.py	/^		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)$/;"	v
+s	ex/test_kobj1.py	/^		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)$/;"	v
+s	testing.py	/^s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)$/;"	v
+ser	robot.py	/^ser = serial.Serial('\/dev\/ttyACM0', 9600)   # open serial con with ard$/;"	v
+ser	server.py	/^ser = serial.Serial('\/dev\/ttyACM0', 9600)   # open serial con with ard$/;"	v
+serversocket	robot.py	/^serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)$/;"	v
+thickness	ex/ball_tracking.py	/^		thickness = int(np.sqrt(args["buffer"] \/ float(i + 1)) * 2.5)$/;"	v
+thickness	ex/ball_tracking_2.py	/^		thickness = int(np.sqrt(args["buffer"] \/ float(i + 1)) * 2.5)$/;"	v
+thickness	ex/ball_tracking_blue.py	/^		thickness = int(np.sqrt(args["buffer"] \/ float(i + 1)) * 2.5)$/;"	v
+thickness	ex/ball_tracking_green.py	/^		thickness = int(np.sqrt(args["buffer"] \/ float(i + 1)) * 2.5)$/;"	v
+thickness	ex/ball_tracking_yellow.py	/^		thickness = int(np.sqrt(args["buffer"] \/ float(i + 1)) * 2.5)$/;"	v
+tm	ex/test_kobj1.py	/^		tm = s.recv(1024)$/;"	v
+tm	testing.py	/^tm = s.recv(1024)$/;"	v
+yellowLower	ex/ball_tracking_yellow.py	/^yellowLower = (20, 190, 20)$/;"	v
+yellowUpper	ex/ball_tracking_yellow.py	/^yellowUpper = (30, 255, 255)$/;"	v
